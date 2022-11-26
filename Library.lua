@@ -8,16 +8,10 @@ function Library:Execute(Arguments)
             settings().Physics.AllowSleep = false
             settings().Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
             sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", 1000)
-            local Table
-            if Arguments["Character"] then
-                Table = Arguments["Character"]:GetChildren()
-            else
-                Table = game.Players.LocalPlayer.Character:GetDescendants()
-            end
-            for Index, Part in pairs(Table) do
-                if (Arguments["Type"] or "Normal") == "Normal" and Part.ClassName:match("Part") and Part.ClassName ~= "ParticleEmitter" and Part.Name ~= "HumanoidRootPart" then
+            for Index, Part in pairs(game.Players.LocalPlayer.Character:Descendants()) do
+                if Part.ClassName:match("Part") and Part.ClassName ~= "ParticleEmitter" then
                     Part.Velocity = Vector3.new(35, 35, 35)
-                elseif Arguments["Type"] == "Special" and Part.ClassName:match("Part") and Part.ClassName ~= "ParticleEmitter" then
+                elseif Part.Name == "HumanoidRootPart" and Part:FindFirstChild("Important") then
                     Part.Velocity = Vector3.new(35, 35, 35)
                 end
             end
@@ -58,9 +52,7 @@ function Library:Execute(Arguments)
     elseif Arguments["Action"] == "Reanimate" then
         local OldCharacter = game.Players.LocalPlayer.Character
         Library:Execute({
-            ["Action"] = "NetBypass",
-            ["Character"] = OldCharacter,
-            ["Type"] = "Special"
+            ["Action"] = "NetBypass"
         })
         game.Players.LocalPlayer.Character.Archivable = true
         local FakeCharacter = game.Players.LocalPlayer.Character:Clone()
@@ -92,9 +84,8 @@ function Library:Execute(Arguments)
                 })
             end
         end
-        game.Players.LocalPlayer.Character = FakeCharacter
         game.Workspace.CurrentCamera.CameraSubject = FakeCharacter.Humanoid
-        return OldCharacter
+        return FakeCharacter
     elseif Arguments["Action"] == "Lerp" and Arguments["Part"]:FindFirstChild("Important") then
         task.spawn(function()
             for Index = 0.1, 1, 0.1 do
