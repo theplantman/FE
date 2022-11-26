@@ -9,7 +9,9 @@ function Library:Execute(Arguments)
             settings().Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
             sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", 1000)
             for Index, Part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-                if Part.ClassName:match("Part") and Part.ClassName ~= "ParticleEmitter" or Part.Name == "HumanoidRootPart" and not Part:FindFirstChild("Important")then
+                if Part.ClassName:match("Part") and Part.ClassName ~= "ParticleEmitter" and Part.Name ~= "HumanoidRootPart" then
+                    Part.Velocity = Vector3.new(35, 35, 35)
+                elseif Part.Name == "HumanoidRootPart" and Part.Parent ~= game.Players.LocalPlayer.Character[game.Players.LocalPlayer.Name] then
                     Part.Velocity = Vector3.new(35, 35, 35)
                 end
             end
@@ -72,6 +74,10 @@ function Library:Execute(Arguments)
                 end
             end
             FakeCharacter.Humanoid:Move(OldCharacter.Humanoid.MoveDirection)
+        end)
+        game.UserInputService.JumpRequest:Connect(function()
+            FakeCharacter.Humanoid.Jump = true
+            FakeCharacter.Humanoid.Sit = false
         end)
         for Index, Part in pairs(OldCharacter:GetChildren()) do
             if Part.ClassName:match("Part") and Part.ClassName ~= "ParticleEmitter" and FakeCharacter:FindFirstChild(Part.Name) and Part.Name ~= "Head" then
