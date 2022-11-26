@@ -81,6 +81,7 @@ function Library:Execute(Arguments)
                     Part.CanCollide = false
                 end
             end
+            FakeCharacter.Humanoid:Move(OldCharacter.Humanoid.MoveDirection)
         end)
         for Index, Part in pairs(OldCharacter:GetChildren()) do
             if Part.ClassName:match("Part") and Part.ClassName ~= "ParticleEmitter" and FakeCharacter:FindFirstChild(Part.Name) and Part.Name ~= "Head" then
