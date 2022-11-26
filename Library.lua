@@ -8,7 +8,7 @@ function Library:Execute(Arguments)
             settings().Physics.AllowSleep = false
             settings().Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
             sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", 1000)
-            for Index, Part in pairs(game.Players.LocalPlayer.Character:Descendants()) do
+            for Index, Part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
                 if Part.ClassName:match("Part") and Part.ClassName ~= "ParticleEmitter" then
                     Part.Velocity = Vector3.new(35, 35, 35)
                 elseif Part.Name == "HumanoidRootPart" and Part:FindFirstChild("Important") then
